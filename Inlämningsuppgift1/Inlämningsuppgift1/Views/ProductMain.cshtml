@@ -1,0 +1,46 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.ProductMain>
+@using ContentModels = Umbraco.Web.PublishedModels;
+@{
+	Layout = "Master.cshtml";
+}
+
+@{
+	var selection = Umbraco.Content(Guid.Parse("50f570d3-1f49-49d5-8cbe-9297f96fdf05"))
+    .ChildrenOfType("productItem")
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate);
+}
+
+<!---Main--->
+	<section id="main" class="wrapper">
+		<div class="container">
+			<header class="major special">
+				<h2>@Model.Value("title")</h2>
+			</header>
+		</div>
+	</section>
+
+	<ul>
+		@foreach (ContentModels.ProductItem item in selection)
+		{
+		<article class="special">
+			@try {
+			<div>
+				<img src="@item.Image.Url" style="width:200px">
+			</div>
+			}
+			catch (Exception e)
+			{
+			}
+			<div class="articletitle">
+				<a href="@item.Url">@item.Name</a>
+			</div>
+			<div class="articlepreview">
+				@Html.Truncate(item.Value("productInfo").ToString(), 20, true)<a href="@item.Url">Read More..</a>
+			</div>
+		</article>
+		<hr />
+		}
+	</ul>
+
+
